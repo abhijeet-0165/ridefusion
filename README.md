@@ -103,6 +103,23 @@ If you previously used a browser script named `supabase-config.js`, it has been 
 - The application uses localStorage for user sessions and wallet data
 - All styling uses Tailwind CSS classes
 
+## Deployment (Vercel)
+
+This project is ready to deploy to Vercel as a static site (Vite build -> `dist`). Follow these steps:
+
+- Sign in to Vercel and create a new project.
+- Link your GitHub/GitLab/Bitbucket repository or import the project manually.
+- Set the **Build Command** to: `npm run build`
+- Set the **Output Directory** to: `dist`
+- Add the following Environment Variables in the Vercel dashboard (Project Settings → Environment Variables):
+	- `VITE_SUPABASE_URL` — your Supabase project URL (e.g. `https://xxx.supabase.co`)
+	- `VITE_SUPABASE_ANON_KEY` — your Supabase anon/public key
+- (Optional) If you need preview or production-specific values, add them under the appropriate environment.
+
+This repository includes a `vercel.json` configured to run the static build and route all requests to `index.html` (single-page app rewrite).
+
+After adding environment variables, trigger a deploy from Vercel or push to your default branch. Vercel will run `npm run build` and publish the resulting `dist` directory.
+
 ## License
 
 © 2024 RideFusion. Made in Rajpura.
