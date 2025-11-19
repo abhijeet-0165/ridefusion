@@ -179,10 +179,10 @@ const BookARide = () => {
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-28">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           
-          {/* LEFT: SEARCH & LIST (8 Cols) */}
+    
           <div className="lg:col-span-8 space-y-6">
             
-            {/* Search Bar */}
+       
             <div className="glass-panel p-6 rounded-2xl">
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-xl font-bold text-white">Find a Ride</h2>
@@ -235,7 +235,7 @@ const BookARide = () => {
               </div>
             </div>
 
-            {/* Rides List */}
+       
             <div className="space-y-4">
               <h3 className="text-gray-400 text-sm font-semibold ml-1">
                 {filteredRides.length} Rides Available
@@ -301,10 +301,10 @@ const BookARide = () => {
             </div>
           </div>
 
-          {/* RIGHT: DASHBOARD (4 Cols) */}
+         
           <div className="lg:col-span-4 space-y-6">
             
-            {/* 1. My Bookings */}
+         
             <div className="glass-panel p-5 rounded-2xl">
               <h3 className="font-bold text-white mb-4 flex items-center gap-2 border-b border-white/10 pb-2">
                 <span>🎫</span> Your Trips
@@ -329,7 +329,7 @@ const BookARide = () => {
               )}
             </div>
 
-            {/* 2. Wallet */}
+            
             <div className="glass-panel p-6 rounded-2xl relative overflow-hidden">
               <div className="flex justify-between items-end mb-4">
                 <div>
@@ -360,7 +360,7 @@ const BookARide = () => {
               </div>
             </div>
 
-            {/* 3. Passes */}
+           
             <div className="glass-panel p-5 rounded-2xl">
               <h3 className="font-bold text-white mb-3 text-sm">Monthly Passes</h3>
               <div className="space-y-2">

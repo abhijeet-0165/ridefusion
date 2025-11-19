@@ -80,11 +80,26 @@ ridefusion-react/
 
 ## Supabase Configuration
 
-The Supabase client is configured in `src/lib/supabase.js`. Make sure your Supabase credentials are correct.
+The Supabase client is configured in `src/lib/supabase.js` and reads credentials from Vite environment variables.
+
+Setup:
+
+- **Create `.env`**: Copy `.env.example` to `.env` at the project root.
+- **Add values**: Set `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` with your Supabase project values.
+- **Run dev**: Start the dev server with `npm run dev` so Vite injects the variables.
+
+Example `.env` (do not commit real keys):
+
+```
+VITE_SUPABASE_URL=https://your-project.supabase.co
+VITE_SUPABASE_ANON_KEY=your-anon-public-key
+```
+
+If you previously used a browser script named `supabase-config.js`, it has been removed to avoid committing secret keys. Use the Vite env approach instead.
 
 ## Notes
 
-- Images (1.png, 2.png, etc.) should be placed in the `public` folder or root directory
+- Images (1.png, 2.png, etc.) should be placed in the `public/images` folder. Put your image files in `public/images` so the app can reference them as `/images/<name>.png`.
 - The application uses localStorage for user sessions and wallet data
 - All styling uses Tailwind CSS classes
 

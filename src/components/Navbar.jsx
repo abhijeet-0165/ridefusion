@@ -34,6 +34,7 @@ const Navbar = () => {
             </div>
           </Link>
 
+       
           <div className="hidden md:flex items-center gap-8">
             <Link to="/" className={location.pathname === '/' ? 'text-yellow-400 font-medium border-b-2 border-yellow-400' : 'text-gray-300 hover:text-white transition hover:scale-105'}>
               Home
@@ -73,11 +74,49 @@ const Navbar = () => {
               )}
             </div>
           </div>
+          
+          <div className="md:hidden flex items-center">
+            <MobileMenu currentUser={currentUser} location={location} handleLogout={handleLogout} />
+          </div>
         </div>
       </div>
     </nav>
+
+  )
+}
+
+
+function MobileMenu({ currentUser, location, handleLogout }) {
+  const [open, setOpen] = useState(false)
+  return (
+    <div className="relative">
+      <button
+        className="p-2 rounded-lg bg-yellow-500 text-black font-bold shadow-md"
+        onClick={() => setOpen(!open)}
+        aria-label="Show menu"
+      >
+        ☰
+      </button>
+      {open && (
+        <div className="absolute right-0 mt-2 w-48 bg-black border border-yellow-500 rounded-xl shadow-lg z-50 flex flex-col">
+          <Link to="/" className={`px-4 py-3 ${location.pathname === '/' ? 'text-yellow-400 font-bold' : 'text-gray-300'} hover:bg-yellow-500/10`} onClick={() => setOpen(false)}>Home</Link>
+          <Link to="/book-ride" className={`px-4 py-3 ${location.pathname === '/book-ride' ? 'text-yellow-400 font-bold' : 'text-gray-300'} hover:bg-yellow-500/10`} onClick={() => setOpen(false)}>Find Rides</Link>
+          <Link to="/offer-ride" className={`px-4 py-3 ${location.pathname === '/offer-ride' ? 'text-yellow-400 font-bold' : 'text-gray-300'} hover:bg-yellow-500/10`} onClick={() => setOpen(false)}>Offer Rides</Link>
+          {currentUser ? (
+            <>
+              <div className="px-4 py-2 text-xs text-gray-400">Hello, <span className="text-yellow-400 font-bold">{currentUser.name}</span></div>
+              <button onClick={handleLogout} className="px-4 py-2 text-red-400 hover:bg-red-500/10 text-left w-full">Logout</button>
+            </>
+          ) : (
+            <>
+              <Link to="/login" className="px-4 py-2 text-gray-400 hover:bg-yellow-500/10" onClick={() => setOpen(false)}>Login</Link>
+              <Link to="/signup" className="px-4 py-2 text-black bg-yellow-500 rounded-lg mx-2 my-2 font-bold text-center" onClick={() => setOpen(false)}>Sign Up</Link>
+            </>
+          )}
+        </div>
+      )}
+    </div>
   )
 }
 
 export default Navbar
-

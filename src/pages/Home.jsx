@@ -109,12 +109,14 @@ const Home = () => {
         ))}
       </div>
 
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+
+      <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden pt-20">
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-cover bg-center scale-105" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1449824913935-59a10b8d2000?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')" }}></div>
           <div className="absolute inset-0 gradient-overlay"></div>
         </div>
-        
+
+       
         <div className="absolute inset-0 pointer-events-none hidden lg:block z-10">
           <div className="absolute top-1/4 right-[10%] floating opacity-60">
             <div className="w-32 h-32 rounded-2xl border border-yellow-500/30 bg-black/40 backdrop-blur-sm shadow-2xl flex items-center justify-center">
@@ -128,7 +130,7 @@ const Home = () => {
           </div>
         </div>
 
-        <div className="relative z-20 text-center px-4 max-w-5xl mx-auto slide-up">
+        <div className="relative z-20 text-center px-4 max-w-5xl mx-auto slide-up w-full">
           <div className="mb-6 h-16 flex items-center justify-center">
             {currentUser && (
               currentUser.isStudent ? (
@@ -146,24 +148,24 @@ const Home = () => {
               )
             )}
           </div>
-          
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-black mb-6 leading-tight tracking-tight">
+
+          <h1 className="text-4xl md:text-6xl lg:text-8xl font-black mb-6 leading-tight tracking-tight break-words">
             <span className="gold-gradient">RideFusion</span><br />
-            <span className="text-white text-2xl md:text-4xl font-light tracking-wide mt-2 block">Rajpura's Trusted Transport</span>
+            <span className="text-white text-xl md:text-3xl lg:text-4xl font-light tracking-wide mt-2 block">Rajpura's Trusted Transport</span>
           </h1>
-          
-          <p className="text-lg md:text-2xl text-gray-300 mb-10 max-w-3xl mx-auto font-light leading-relaxed">
+
+          <p className="text-base md:text-xl lg:text-2xl text-gray-300 mb-10 max-w-3xl mx-auto font-light leading-relaxed">
             Safe, affordable, and reliable rides for students and locals. <br className="hidden md:block" />Available when you need us, right here in Rajpura.
           </p>
-          
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center w-full">
             <Link to="/book-ride" className="w-full sm:w-auto">
-              <button className="w-full sm:w-auto px-8 py-4 bg-yellow-500 hover:bg-yellow-400 text-black font-bold rounded-xl transition-all transform hover:scale-105 shadow-[0_0_20px_rgba(255,215,0,0.3)]">
+              <button className="w-full sm:w-auto px-6 py-3 md:px-8 md:py-4 bg-yellow-500 hover:bg-yellow-400 text-black font-bold rounded-xl transition-all transform hover:scale-105 shadow-[0_0_20px_rgba(255,215,0,0.3)]">
                 🚗 Book Your Ride
               </button>
             </Link>
             <Link to="/offer-ride" className="w-full sm:w-auto">
-              <button className="w-full sm:w-auto px-8 py-4 border border-yellow-500 text-yellow-400 hover:bg-yellow-500/10 font-bold rounded-xl transition-all transform hover:scale-105">
+              <button className="w-full sm:w-auto px-6 py-3 md:px-8 md:py-4 border border-yellow-500 text-yellow-400 hover:bg-yellow-500/10 font-bold rounded-xl transition-all transform hover:scale-105">
                 🎯 Become a Driver
               </button>
             </Link>
@@ -200,12 +202,12 @@ const Home = () => {
 
       <section className="py-24 px-4 bg-[#0f0f0f]">
         <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row justify-between items-end mb-10 gap-6">
-            <div>
+          <div className="flex flex-col md:flex-row justify-between items-end mb-10 gap-6 text-center md:text-left">
+            <div className="w-full md:w-auto text-center md:text-left">
               <h2 className="text-3xl md:text-4xl font-bold text-white mb-2">🚀 Available Now</h2>
               <p className="text-gray-400">Real-time rides departing soon.</p>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 justify-center md:justify-end w-full md:w-auto mt-4 md:mt-0">
               <div className="bg-green-900/30 border border-green-500/30 rounded-full px-4 py-1.5 flex items-center gap-2">
                 <span className="relative flex h-3 w-3">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
@@ -219,9 +221,9 @@ const Home = () => {
             </div>
           </div>
 
-          <div className="royal-card rounded-2xl p-4 mb-10 sticky top-24 z-40">
+          <div className="royal-card rounded-2xl p-4 mb-10 z-40">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <div className="relative">
+                <div className="relative w-full max-w-md mx-auto">
                 <span className="absolute left-3 top-3 text-gray-500">🚙</span>
                 <select
                   value={quickFilters.vehicle}
@@ -355,7 +357,7 @@ const Home = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[1, 2, 3, 4].map((num) => (
               <div key={num} className="group relative h-80 rounded-2xl overflow-hidden cursor-pointer">
-                <div className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" style={{ backgroundImage: `url(${num}.png)` }}></div>
+                <div className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" style={{ backgroundImage: `url(/images/${num}.png)` }}></div>
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-90"></div>
                 <div className="absolute bottom-0 left-0 p-6 translate-y-2 group-hover:translate-y-0 transition-transform">
                   <h4 className="text-xl font-bold text-yellow-400">
@@ -376,9 +378,9 @@ const Home = () => {
           <h2 className="text-3xl md:text-5xl font-bold text-center mb-20 gold-gradient">Choose Your Ride</h2>
           
           {[
-            { type: 'Car', emoji: '🚗', title: 'Comfort Cars', desc: 'Ideal for groups and longer distances. Enjoy AC, music, and a dust-free ride across Rajpura.', features: ['Air Conditioned', '4 Seater Capacity', 'From ₹20/km'], img: '5.png', reverse: false },
-            { type: 'Auto', emoji: '🛺', title: 'Smart Auto', desc: 'The classic choice. Navigate narrow lanes easily and save money on daily commutes.', features: ['Budget Friendly', '3 Seater Capacity', 'From ₹10 Base Fare'], img: '6.png', reverse: true },
-            { type: 'Bike', emoji: '🏍️', title: 'Rapid Bike', desc: 'Solo traveler? Reach your class or meeting in record time. Helmet included.', features: ['Fastest Option', '1 Seater', 'From ₹8 Base Fare'], img: '7.png', reverse: false }
+            { type: 'Car', emoji: '🚗', title: 'Comfort Cars', desc: 'Ideal for groups and longer distances. Enjoy AC, music, and a dust-free ride across Rajpura.', features: ['Air Conditioned', '4 Seater Capacity', 'From ₹20/km'], img: '/images/5.png', reverse: false },
+            { type: 'Auto', emoji: '🛺', title: 'Smart Auto', desc: 'The classic choice. Navigate narrow lanes easily and save money on daily commutes.', features: ['Budget Friendly', '3 Seater Capacity', 'From ₹10 Base Fare'], img: '/images/6.png', reverse: true },
+            { type: 'Bike', emoji: '🏍️', title: 'Rapid Bike', desc: 'Solo traveler? Reach your class or meeting in record time. Helmet included.', features: ['Fastest Option', '1 Seater', 'From ₹8 Base Fare'], img: '/images/7.png', reverse: false }
           ].map((vehicle, idx) => (
             <div key={idx} className={`flex flex-col lg:flex-row${vehicle.reverse ? '-reverse' : ''} items-center gap-12 ${idx < 2 ? 'mb-24' : ''}`}>
               <div className="w-full lg:w-1/2 relative group">

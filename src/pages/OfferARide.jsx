@@ -137,7 +137,7 @@ const OfferARide = () => {
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-28">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           
-          {/* LEFT: FORM (7 Cols) */}
+       
           <div className="lg:col-span-7 space-y-6">
             <div className="glass-panel p-6 rounded-2xl border border-yellow-500/20">
               <div className="flex justify-between items-start mb-6">
@@ -150,7 +150,7 @@ const OfferARide = () => {
 
               <div className="space-y-6">
                 
-                {/* 1. Ride Type Toggles */}
+               
                 <div className="grid grid-cols-2 gap-4">
                   <div
                     onClick={() => setForm({...form, womenOnly: !form.womenOnly})}
@@ -179,7 +179,7 @@ const OfferARide = () => {
 
                 <hr className="border-white/10" />
 
-                {/* 2. Vehicle & Route */}
+                
                 <div className="grid grid-cols-3 gap-3">
                   {['Car', 'Auto', 'Bike'].map(v => (
                     <div
@@ -216,7 +216,7 @@ const OfferARide = () => {
                   </select>
                 </div>
 
-                {/* 3. Smart Date/Time */}
+              
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="text-[10px] text-gray-500 uppercase font-bold mb-1 block">Date (Max 2 Days)</label>
@@ -240,7 +240,7 @@ const OfferARide = () => {
                   </div>
                 </div>
 
-                {/* 4. Seats/Price */}
+              
                 <div className="flex gap-4">
                   <div className="flex-1">
                     <label className="text-[10px] text-gray-500 uppercase font-bold mb-1 block">Seats</label>
@@ -294,7 +294,7 @@ const OfferARide = () => {
             </div>
           </div>
 
-          {/* RIGHT: DASHBOARD (5 Cols) */}
+          
           <div className="lg:col-span-5 space-y-6">
             <div className="glass-panel p-6 rounded-2xl min-h-[500px]">
               <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
@@ -311,7 +311,7 @@ const OfferARide = () => {
                   {myRides.map(ride => (
                     <div key={ride.id} className="bg-white/5 p-4 rounded-xl border border-white/10 relative group">
                       
-                      {/* Badge Section */}
+                      
                       <div className="flex gap-2 mb-2">
                         {ride.womenOnly && <span className="text-[9px] bg-pink-500/20 text-pink-400 px-2 py-0.5 rounded border border-pink-500/30">👩 Women Only</span>}
                         {ride.examSpecial && <span className="text-[9px] bg-blue-500/20 text-blue-400 px-2 py-0.5 rounded border border-blue-500/30">🎓 Exam Special</span>}

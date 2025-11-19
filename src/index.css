@@ -1,4 +1,4 @@
-/* Base Theme Variables */
+
 :root {
   --gold-primary: #ffd700;
   --gold-secondary: #ffb347;
@@ -16,7 +16,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Gradients & Text Effects */
+
 .royal-gradient {
   background: radial-gradient(circle at center, #1a1a1a 0%, #000000 100%);
 }
@@ -29,7 +29,7 @@ body {
   text-shadow: 0px 2px 10px rgba(255, 215, 0, 0.2);
 }
 
-/* Animations */
+
 .floating {
   animation: float 6s ease-in-out infinite;
 }
@@ -48,7 +48,7 @@ body {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Card & UI Elements */
+
 .royal-card {
   background: rgba(30, 30, 30, 0.6);
   backdrop-filter: blur(12px);
@@ -67,7 +67,7 @@ body {
   background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.9));
 }
 
-/* Particles */
+
 .particle {
   position: absolute;
   width: 3px;
@@ -86,7 +86,7 @@ body {
   100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
 }
 
-/* Ride Card Animation */
+
 .ride-card-animate {
   animation: fadeInUp 0.6s ease-out forwards;
   opacity: 0;
@@ -97,7 +97,7 @@ body {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Custom Scrollbar */
+
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -112,7 +112,7 @@ body {
   background: #ffd700;
 }
 
-/* Glass Panel */
+
 .glass-panel {
   background: rgba(18, 18, 18, 0.8);
   backdrop-filter: blur(12px);
@@ -120,7 +120,7 @@ body {
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
 }
 
-/* Button Gold */
+
 .btn-gold {
   background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
   color: black;
@@ -133,7 +133,7 @@ body {
   box-shadow: 0 4px 15px rgba(251, 191, 36, 0.3);
 }
 
-/* Filter Chips */
+
 .filter-chip {
   border: 1px solid #333;
   background: rgba(255,255,255,0.05);
@@ -153,7 +153,7 @@ body {
   color: #bfdbfe;
 }
 
-/* Select Card */
+
 .select-card {
   border: 1px solid #333;
   background: rgba(255,255,255,0.03);
@@ -167,7 +167,7 @@ body {
   color: #fbbf24;
 }
 
-/* Toggle Card */
+
 .toggle-card {
   border: 1px solid #333;
   background: rgba(255,255,255,0.03);
