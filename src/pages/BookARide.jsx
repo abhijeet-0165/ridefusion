@@ -4,8 +4,22 @@ import { supabase } from '../lib/supabase'
 import Navbar from '../components/Navbar'
 
 const PASS_OPTIONS = [
-  { id: '1', title: 'Rajpura → Chandigarh', price: 2200, subtitle: 'College Daily' },
-  { id: '2', title: 'Campus Loop', price: 1200, subtitle: 'Hostel Shuttle' }
+  { 
+    id: '1', 
+    title: 'Rajpura → Chandigarh', 
+    price: 2200, 
+    subtitle: 'College Daily',
+    route: { from: 'Rajpura', to: 'Chandigarh' },
+    validDays: 30
+  },
+  { 
+    id: '2', 
+    title: 'Campus Loop', 
+    price: 1200, 
+    subtitle: 'Hostel Shuttle',
+    route: { from: 'Campus', to: 'Hostel' },
+    validDays: 30
+  }
 ]
 
 const currency = (val) => `₹${Number(val).toLocaleString('en-IN')}`
@@ -28,6 +42,8 @@ const BookARide = () => {
   const [processingId, setProcessingId] = useState(null)
   const [toast, setToast] = useState(null)
   const [topUpAmount, setTopUpAmount] = useState('')
+  const [monthlyPasses, setMonthlyPasses] = useState([])
+  const [purchasingPassId, setPurchasingPassId] = useState(null)
 
   const [filters, setFilters] = useState({ 
     from: '', 
@@ -48,6 +64,7 @@ const BookARide = () => {
       setUser(userData)
 
       loadWallet(userData.id)
+      loadMonthlyPasses(userData.id)
       await fetchRides()
       await fetchBookings(userData.id)
     }
@@ -70,6 +87,81 @@ const BookARide = () => {
     setWallet(newBal)
     setWalletHistory(newHistory)
     localStorage.setItem(`wallet_v2_${user.id}`, JSON.stringify({ balance: newBal, history: newHistory }))
+  }
+
+  const loadMonthlyPasses = (id) => {
+    const stored = localStorage.getItem(`monthlyPasses_${id}`)
+    if (stored) {
+      const passes = JSON.parse(stored)
+      // Filter out expired passes
+      const activePasses = passes.filter(pass => {
+        const expiryDate = new Date(pass.purchasedDate)
+        expiryDate.setDate(expiryDate.getDate() + pass.validDays)
+        return expiryDate > new Date()
+      })
+      setMonthlyPasses(activePasses)
+      if (activePasses.length !== passes.length) {
+        localStorage.setItem(`monthlyPasses_${id}`, JSON.stringify(activePasses))
+      }
+    }
+  }
+
+  const handlePurchasePass = async (pass) => {
+    if (purchasingPassId) return
+    if (wallet < pass.price) {
+      showToast("Insufficient Balance", "error")
+      return
+    }
+
+    setPurchasingPassId(pass.id)
+    try {
+      const newPass = {
+        id: uid(),
+        passId: pass.id,
+        title: pass.title,
+        route: pass.route,
+        purchasedDate: new Date().toISOString(),
+        validDays: pass.validDays,
+        price: pass.price
+      }
+
+      const updatedPasses = [...monthlyPasses, newPass]
+      setMonthlyPasses(updatedPasses)
+      localStorage.setItem(`monthlyPasses_${user.id}`, JSON.stringify(updatedPasses))
+
+      updateWallet(wallet - pass.price, {
+        id: uid(),
+        desc: `Monthly Pass: ${pass.title}`,
+        amount: pass.price,
+        type: 'debit',
+        date: new Date().toLocaleDateString()
+      })
+
+      showToast(`Monthly Pass Purchased! Valid for ${pass.validDays} days`)
+    } catch (err) {
+      showToast("Purchase Failed", "error")
+    } finally {
+      setPurchasingPassId(null)
+    }
+  }
+
+  const getActivePassForRide = (ride) => {
+    return monthlyPasses.find(pass => {
+      const rideFrom = ride.from.toLowerCase()
+      const rideTo = ride.to.toLowerCase()
+      const passFrom = pass.route.from.toLowerCase()
+      const passTo = pass.route.to.toLowerCase()
+      
+      // Check if ride matches pass route (either direction)
+      return (rideFrom.includes(passFrom) || passFrom.includes(rideFrom)) &&
+             (rideTo.includes(passTo) || passTo.includes(rideTo))
+    })
+  }
+
+  const isPassExpired = (pass) => {
+    const expiryDate = new Date(pass.purchasedDate)
+    expiryDate.setDate(expiryDate.getDate() + pass.validDays)
+    return expiryDate <= new Date()
   }
 
   const handleAddFunds = () => {
@@ -100,30 +192,63 @@ const BookARide = () => {
 
   const handleBook = async (ride) => {
     if (processingId) return
-    if (wallet < ride.pricePerSeat) return showToast("Insufficient Balance", "error")
+    
+    // Check if user has an active monthly pass for this route
+    const activePass = getActivePassForRide(ride)
+    const finalPrice = activePass ? 0 : ride.pricePerSeat
+    
+    if (wallet < finalPrice) return showToast("Insufficient Balance", "error")
     
     setProcessingId(ride.id)
     try {
-      const { error: bError } = await supabase.from('bookings').insert([{
+      const bookingData = {
         userId: user.id,
         rideId: ride.id,
-        amount: ride.pricePerSeat,
+        amount: finalPrice,
         status: 'confirmed',
         route: `${ride.from} → ${ride.to}`
-      }])
-      if (bError) throw bError
+      }
+      
+      // Add usedPass if monthly pass was used (optional column - see SUPABASE_MIGRATION.sql)
+      // This will work even if the column doesn't exist (Supabase will ignore unknown columns in some cases)
+      // If you get an error about unknown column, either add the column or remove this line
+      if (activePass) {
+        bookingData.usedPass = activePass.id
+      }
+      
+      const { error: bError } = await supabase.from('bookings').insert([bookingData])
+      if (bError) {
+        // If error is about unknown column, retry without usedPass field
+        if (bError.message && bError.message.includes('usedPass')) {
+          delete bookingData.usedPass
+          const { error: retryError } = await supabase.from('bookings').insert([bookingData])
+          if (retryError) throw retryError
+        } else {
+          throw bError
+        }
+      }
 
       await supabase.from('rides').update({ bookedSeats: ride.bookedSeats + 1 }).eq('id', ride.id)
 
-      updateWallet(wallet - ride.pricePerSeat, {
-        id: uid(),
-        desc: `Ride: ${ride.from} → ${ride.to}`,
-        amount: ride.pricePerSeat,
-        type: 'debit',
-        date: new Date().toLocaleDateString()
-      })
+      if (finalPrice > 0) {
+        updateWallet(wallet - finalPrice, {
+          id: uid(),
+          desc: `Ride: ${ride.from} → ${ride.to}`,
+          amount: finalPrice,
+          type: 'debit',
+          date: new Date().toLocaleDateString()
+        })
+      } else {
+        updateWallet(wallet, {
+          id: uid(),
+          desc: `Ride: ${ride.from} → ${ride.to} (Monthly Pass)`,
+          amount: 0,
+          type: 'debit',
+          date: new Date().toLocaleDateString()
+        })
+      }
 
-      showToast("Ride Booked!")
+      showToast(activePass ? "Ride Booked with Monthly Pass! 🎫" : "Ride Booked!")
       await fetchRides()
       await fetchBookings(user.id)
     } catch (err) {
@@ -284,8 +409,18 @@ const BookARide = () => {
 
                     <div className="flex flex-col items-end min-w-[100px] gap-2">
                       <div className="text-right">
-                        <div className="text-2xl font-bold text-yellow-400">{currency(ride.pricePerSeat)}</div>
-                        <div className="text-[10px] text-green-400">{ride.seats - ride.bookedSeats} seats left</div>
+                        {getActivePassForRide(ride) ? (
+                          <>
+                            <div className="text-lg font-bold text-green-400 line-through opacity-60">{currency(ride.pricePerSeat)}</div>
+                            <div className="text-xl font-bold text-green-400">FREE</div>
+                            <div className="text-[10px] text-green-400">🎫 Monthly Pass</div>
+                          </>
+                        ) : (
+                          <>
+                            <div className="text-2xl font-bold text-yellow-400">{currency(ride.pricePerSeat)}</div>
+                            <div className="text-[10px] text-green-400">{ride.seats - ride.bookedSeats} seats left</div>
+                          </>
+                        )}
                       </div>
                       <button
                         onClick={() => handleBook(ride)}
@@ -362,17 +497,67 @@ const BookARide = () => {
 
            
             <div className="glass-panel p-5 rounded-2xl">
-              <h3 className="font-bold text-white mb-3 text-sm">Monthly Passes</h3>
-              <div className="space-y-2">
-                {PASS_OPTIONS.map(pass => (
-                  <div key={pass.id} className="bg-black/40 border border-gray-700 p-3 rounded-xl flex justify-between items-center group hover:border-yellow-500/50 transition cursor-pointer">
-                    <div>
-                      <div className="text-xs font-bold text-gray-300 group-hover:text-white">{pass.title}</div>
-                      <div className="text-[10px] text-gray-500">{pass.subtitle}</div>
-                    </div>
-                    <div className="text-xs font-bold text-yellow-500">{currency(pass.price)}</div>
+              <h3 className="font-bold text-white mb-3 text-sm flex items-center gap-2">
+                <span>🎫</span> Monthly Passes
+              </h3>
+              
+              {monthlyPasses.length > 0 && (
+                <div className="mb-4 pb-4 border-b border-white/10">
+                  <div className="text-[10px] text-gray-400 mb-2 uppercase">Active Passes</div>
+                  <div className="space-y-2">
+                    {monthlyPasses.map(pass => {
+                      const expiryDate = new Date(pass.purchasedDate)
+                      expiryDate.setDate(expiryDate.getDate() + pass.validDays)
+                      const daysLeft = Math.ceil((expiryDate - new Date()) / (1000 * 60 * 60 * 24))
+                      
+                      return (
+                        <div key={pass.id} className="bg-green-500/10 border border-green-500/30 p-2 rounded-lg">
+                          <div className="text-xs font-bold text-green-400">{pass.title}</div>
+                          <div className="text-[10px] text-gray-400 mt-1">
+                            {daysLeft > 0 ? `${daysLeft} days left` : 'Expired'}
+                          </div>
+                        </div>
+                      )
+                    })}
                   </div>
-                ))}
+                </div>
+              )}
+
+              <div className="space-y-2">
+                {PASS_OPTIONS.map(pass => {
+                  const hasPass = monthlyPasses.some(p => p.passId === pass.id && !isPassExpired(p))
+                  
+                  return (
+                    <div 
+                      key={pass.id} 
+                      className={`bg-black/40 border p-3 rounded-xl flex justify-between items-center group transition ${
+                        hasPass 
+                          ? 'border-green-500/50 bg-green-500/5' 
+                          : 'border-gray-700 hover:border-yellow-500/50'
+                      }`}
+                    >
+                      <div className="flex-1">
+                        <div className={`text-xs font-bold ${hasPass ? 'text-green-400' : 'text-gray-300 group-hover:text-white'}`}>
+                          {pass.title}
+                          {hasPass && <span className="ml-2 text-[10px]">✓ Active</span>}
+                        </div>
+                        <div className="text-[10px] text-gray-500">{pass.subtitle}</div>
+                      </div>
+                      <div className="flex flex-col items-end gap-1">
+                        <div className="text-xs font-bold text-yellow-500">{currency(pass.price)}</div>
+                        {!hasPass && (
+                          <button
+                            onClick={() => handlePurchasePass(pass)}
+                            disabled={purchasingPassId === pass.id || wallet < pass.price}
+                            className="text-[10px] bg-yellow-500 hover:bg-yellow-400 text-black px-2 py-1 rounded disabled:opacity-50 disabled:cursor-not-allowed"
+                          >
+                            {purchasingPassId === pass.id ? '...' : 'Buy'}
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  )
+                })}
               </div>
             </div>
 
