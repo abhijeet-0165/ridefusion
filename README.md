@@ -1,0 +1,94 @@
+# RideFusion - React Application
+
+A modern React application for RideFusion, Rajpura's local transport service. This application has been converted from HTML pages to a fully functional React application with routing.
+
+## Features
+
+- 🏠 **Home Page** - Landing page with live ride statistics and available rides
+- 🔐 **Authentication** - Login and Signup pages with form validation
+- 🚗 **Book a Ride** - Find and book available rides with filtering options
+- 🎯 **Offer a Ride** - Drivers can publish their rides
+- 💰 **Wallet System** - Integrated wallet for payments
+- 📱 **Responsive Design** - Works on all devices
+
+## Tech Stack
+
+- **React 18** - UI library
+- **React Router** - Routing
+- **Vite** - Build tool and dev server
+- **Supabase** - Backend database
+- **Tailwind CSS** - Styling (via CDN)
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js (v16 or higher)
+- npm or yarn
+
+### Installation
+
+1. Install dependencies:
+```bash
+npm install
+```
+
+2. Start the development server:
+```bash
+npm run dev
+```
+
+3. Open your browser and navigate to `http://localhost:3000`
+
+### Build for Production
+
+```bash
+npm run build
+```
+
+The built files will be in the `dist` directory.
+
+### Preview Production Build
+
+```bash
+npm run preview
+```
+
+## Project Structure
+
+```
+ridefusion-react/
+├── src/
+│   ├── components/      # Reusable components (Navbar, Footer)
+│   ├── pages/          # Page components (Home, Login, Signup, etc.)
+│   ├── lib/            # Utilities (Supabase client)
+│   ├── App.jsx         # Main app component with routing
+│   ├── main.jsx        # Entry point
+│   └── index.css       # Global styles
+├── index.html          # HTML template
+├── package.json        # Dependencies
+└── vite.config.js      # Vite configuration
+```
+
+## Pages
+
+- `/` - Home page
+- `/login` - Login page
+- `/signup` - Signup page
+- `/book-ride` - Book a ride page
+- `/offer-ride` - Offer a ride page
+
+## Supabase Configuration
+
+The Supabase client is configured in `src/lib/supabase.js`. Make sure your Supabase credentials are correct.
+
+## Notes
+
+- Images (1.png, 2.png, etc.) should be placed in the `public` folder or root directory
+- The application uses localStorage for user sessions and wallet data
+- All styling uses Tailwind CSS classes
+
+## License
+
+© 2024 RideFusion. Made in Rajpura.
+
