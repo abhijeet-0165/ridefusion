@@ -34,7 +34,7 @@ const Footer = () => {
             <h4 className="text-white font-bold mb-6">Contact</h4>
             <ul className="space-y-3 text-gray-500">
               <li className="flex items-center gap-3"><span>📍</span> Rajpura, Punjab</li>
-              <li className="flex items-center gap-3"><span>📞</span> +91 98765 43210</li>
+              <li className="flex items-center gap-3"><span>📞</span> +91 92168 79000</li>
               <li className="flex items-center gap-3"><span>✉️</span> support@ridefusion.in</li>
             </ul>
           </div>
