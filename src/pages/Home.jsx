@@ -4,6 +4,22 @@ import { supabase } from '../lib/supabase'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 
+// Image paths - using BASE_URL to ensure compatibility with Vercel
+const getImagePath = (imageName) => {
+  const baseUrl = (import.meta.env.BASE_URL || '/').replace(/\/$/, '')
+  return `${baseUrl}/images/${imageName}`
+}
+
+const images = {
+  1: getImagePath('1.png'),
+  2: getImagePath('2.png'),
+  3: getImagePath('3.png'),
+  4: getImagePath('4.png'),
+  5: getImagePath('5.png'),
+  6: getImagePath('6.png'),
+  7: getImagePath('7.png'),
+}
+
 const Home = () => {
   const [currentUser, setCurrentUser] = useState(null)
   const [allRides, setAllRides] = useState([])
@@ -357,7 +373,7 @@ const Home = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[1, 2, 3, 4].map((num) => (
               <div key={num} className="group relative h-80 rounded-2xl overflow-hidden cursor-pointer">
-                <div className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" style={{ backgroundImage: `url(/images/${num}.png)` }}></div>
+                <div className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" style={{ backgroundImage: `url(${images[num]})` }}></div>
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-90"></div>
                 <div className="absolute bottom-0 left-0 p-6 translate-y-2 group-hover:translate-y-0 transition-transform">
                   <h4 className="text-xl font-bold text-yellow-400">
@@ -378,9 +394,9 @@ const Home = () => {
           <h2 className="text-3xl md:text-5xl font-bold text-center mb-20 gold-gradient">Choose Your Ride</h2>
           
           {[
-            { type: 'Car', emoji: '🚗', title: 'Comfort Cars', desc: 'Ideal for groups and longer distances. Enjoy AC, music, and a dust-free ride across Rajpura.', features: ['Air Conditioned', '4 Seater Capacity', 'From ₹20/km'], img: '/images/5.png', reverse: false },
-            { type: 'Auto', emoji: '🛺', title: 'Smart Auto', desc: 'The classic choice. Navigate narrow lanes easily and save money on daily commutes.', features: ['Budget Friendly', '3 Seater Capacity', 'From ₹10 Base Fare'], img: '/images/6.png', reverse: true },
-            { type: 'Bike', emoji: '🏍️', title: 'Rapid Bike', desc: 'Solo traveler? Reach your class or meeting in record time. Helmet included.', features: ['Fastest Option', '1 Seater', 'From ₹8 Base Fare'], img: '/images/7.png', reverse: false }
+            { type: 'Car', emoji: '🚗', title: 'Comfort Cars', desc: 'Ideal for groups and longer distances. Enjoy AC, music, and a dust-free ride across Rajpura.', features: ['Air Conditioned', '4 Seater Capacity', 'From ₹20/km'], img: images[5], reverse: false },
+            { type: 'Auto', emoji: '🛺', title: 'Smart Auto', desc: 'The classic choice. Navigate narrow lanes easily and save money on daily commutes.', features: ['Budget Friendly', '3 Seater Capacity', 'From ₹10 Base Fare'], img: images[6], reverse: true },
+            { type: 'Bike', emoji: '🏍️', title: 'Rapid Bike', desc: 'Solo traveler? Reach your class or meeting in record time. Helmet included.', features: ['Fastest Option', '1 Seater', 'From ₹8 Base Fare'], img: images[7], reverse: false }
           ].map((vehicle, idx) => (
             <div key={idx} className={`flex flex-col lg:flex-row${vehicle.reverse ? '-reverse' : ''} items-center gap-12 ${idx < 2 ? 'mb-24' : ''}`}>
               <div className="w-full lg:w-1/2 relative group">
