@@ -1,3 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* your custom styles below */
 
 :root {
   --gold-primary: #ffd700;
